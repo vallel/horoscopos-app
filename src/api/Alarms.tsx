@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alarm } from "../dtos/Alarm";
 
-const ALARMS_STORAGE = "alarms";
+const ALARMS_STORAGE = "alarmslist";
 
 export async function getAlarms() {
   const response = await AsyncStorage.getItem(ALARMS_STORAGE);

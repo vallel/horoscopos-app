@@ -13,6 +13,7 @@ import Checkbox from "expo-checkbox";
 import { Alarm as AlarmDto } from "../dtos/Alarm";
 import { Days as DaysDto } from "../dtos/Days";
 import { saveAlarm } from "../api/Alarms";
+import { formatTime } from "../utils/time";
 
 export default function NewAlarm(props: any) {
   const { navigation } = props;
@@ -52,6 +53,7 @@ export default function NewAlarm(props: any) {
 
   const onAddAlarm = async () => {
     const alarm: AlarmDto = {
+      id: Date.now().toString(),
       name: name,
       time: time,
       days: days,
@@ -67,6 +69,8 @@ export default function NewAlarm(props: any) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Crear alarma:</Text>
+
       <TextInput
         style={styles.input}
         maxLength={50}
@@ -75,14 +79,9 @@ export default function NewAlarm(props: any) {
         onChangeText={(nameValue) => setName(nameValue)}
       />
       <TextInput
-        style={styles.input}
+        style={styles.hour}
         placeholder="7:00 AM"
-        value={time.toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: undefined,
-          hour12: true,
-        })}
+        value={formatTime(time)}
         onFocus={onTimePickerFocus}
         onKeyPress={() => false}
       />
@@ -104,58 +103,77 @@ export default function NewAlarm(props: any) {
         <CheckField name="domingo" onSelection={onDaySelected} />
       </View>
 
-      <View style={styles.checkContainer}>
-        <Text>Horoscopo</Text>
-        <Checkbox
-          value={horoscope}
-          color="#349beb"
-          onValueChange={(value) => setHoroscope(value)}
-        />
+      <View style={styles.checks}>
+        <View style={styles.checkContainer}>
+          <Text>Horoscopo</Text>
+          <Checkbox
+            value={horoscope}
+            color="#349beb"
+            onValueChange={(value) => setHoroscope(value)}
+          />
+        </View>
+
+        <View style={styles.checkContainer}>
+          <Text>Vibracion</Text>
+          <Checkbox
+            value={vibration}
+            color="#349beb"
+            onValueChange={(value) => setVibration(value)}
+          />
+        </View>
+
+        <View style={styles.checkContainer}>
+          <Text>Música relax</Text>
+          <Checkbox
+            value={music}
+            color="#349beb"
+            onValueChange={(value) => setMusic(value)}
+          />
+        </View>
       </View>
 
-      <View style={styles.checkContainer}>
-        <Text>Vibracion</Text>
-        <Checkbox
-          value={vibration}
-          color="#349beb"
-          onValueChange={(value) => setVibration(value)}
-        />
-      </View>
-
-      <View style={styles.checkContainer}>
-        <Text>Música relax</Text>
-        <Checkbox
-          value={music}
-          color="#349beb"
-          onValueChange={(value) => setMusic(value)}
-        />
-      </View>
-
-      <Button title="Agregar" onPress={onAddAlarm} />
+      <Button title="Crear Alarma" onPress={onAddAlarm} />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
+    padding: 10,
+  },
+  title: {
+    fontSize: 16,
+    marginBottom: 10,
+    textTransform: "capitalize",
   },
   input: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    textAlign: "center",
+    fontSize: 16,
     borderColor: "#444",
     borderWidth: 1,
     borderRadius: 5,
     marginTop: 5,
     marginBottom: 5,
   },
+  hour: {
+    textAlign: "center",
+    fontSize: 30,
+    marginVertical: 15,
+  },
   daysContainer: {
     flexDirection: "row",
     marginVertical: 10,
     justifyContent: "space-evenly",
   },
+  checks: {
+    marginVertical: 10,
+  },
   checkContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    paddingHorizontal: 50,
     marginVertical: 5,
   },
 });
