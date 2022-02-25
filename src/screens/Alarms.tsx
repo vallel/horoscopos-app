@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { Button, View, Text, StyleSheet, FlatList } from "react-native";
 import { getAlarms } from "../api/Alarms";
 import { formatTime } from "../utils/time";
+import { getRandomQuote } from "../api/Quotes";
 
 export default function AlarmsNavigation(props: any) {
   const { navigation } = props;
 
   const [alarms, setAlarms] = useState([]);
+  const [quote, setQuote] = useState("");
+
   const isScreenFocused = useIsFocused();
 
   const onAddAlarm = () => {
@@ -20,6 +23,10 @@ export default function AlarmsNavigation(props: any) {
         const alarmsList = await getAlarms();
         setAlarms(alarmsList);
       })();
+
+      if (!quote) {
+        setQuote(getRandomQuote());
+      }
     }
   }, [isScreenFocused]);
 
@@ -27,7 +34,7 @@ export default function AlarmsNavigation(props: any) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.welcome}>Bienvenida(o) %fulanit@%.</Text>
-        <Text style={styles.message}>%Frase motivadora%</Text>
+        <Text style={styles.message}>{quote}</Text>
       </View>
 
       {/* <Text style={styles.alarmsTitle}>Alarmas:</Text> */}
@@ -59,14 +66,16 @@ const styles = StyleSheet.create({
   },
   welcome: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 22,
     marginBottom: 3,
   },
   message: {
     textAlign: "center",
     marginVertical: 5,
+    padding: 5,
     fontStyle: "italic",
-    fontWeight: "bold",
+    fontSize: 15,
+    color: "#0f67bf",
   },
   alarmsTitle: {
     textAlign: "center",
