@@ -45,7 +45,17 @@ export default function NewAlarm(props: any) {
     setShowPicker(false);
   };
 
-  const onDaySelected = (day: string, selected: boolean) => {
+  const onDaySelected = (
+    day:
+      | "lunes"
+      | "martes"
+      | "miercoles"
+      | "jueves"
+      | "viernes"
+      | "sabado"
+      | "domingo",
+    selected: boolean
+  ) => {
     let dayValues = days;
     dayValues[day] = selected;
     setDays(dayValues);

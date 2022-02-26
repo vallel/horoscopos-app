@@ -4,6 +4,7 @@ import { Button, View, Text, StyleSheet, FlatList } from "react-native";
 import { getAlarms } from "../api/Alarms";
 import { formatTime } from "../utils/time";
 import { getRandomQuote } from "../api/Quotes";
+import { Alarm } from "../dtos/Alarm";
 
 export default function AlarmsNavigation(props: any) {
   const { navigation } = props;
@@ -37,20 +38,14 @@ export default function AlarmsNavigation(props: any) {
         <Text style={styles.message}>{quote}</Text>
       </View>
 
-      {/* <Text style={styles.alarmsTitle}>Alarmas:</Text> */}
-
-      <FlatList
-        style={styles.alarms}
-        data={alarms}
-        renderItem={({ item }) => (
-          <View style={styles.alarm}>
-            <Text style={styles.alarmTitle}>{item.name}</Text>
-            <Text style={styles.alarmTime}>
-              {formatTime(new Date(item.time))}
-            </Text>
-          </View>
-        )}
-      />
+      {alarms.map((alarm: Alarm) => (
+        <View style={styles.alarm} key={alarm.id}>
+          <Text style={styles.alarmTitle}>{alarm.name}</Text>
+          <Text style={styles.alarmTime}>
+            {formatTime(new Date(alarm.time))}
+          </Text>
+        </View>
+      ))}
 
       <Button title="Agregar" onPress={onAddAlarm} />
     </View>

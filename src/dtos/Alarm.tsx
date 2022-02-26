@@ -1,8 +1,8 @@
 import { Days as DaysDto } from "./Days";
 
 export interface Alarm {
-  id: String;
-  name: String;
+  id: string;
+  name: string;
   time: Date;
   days: DaysDto;
   isHoroscope: Boolean;
