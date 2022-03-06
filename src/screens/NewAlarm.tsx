@@ -10,10 +10,19 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import CheckField from "../components/CheckField";
 import Checkbox from "expo-checkbox";
+import * as Notifications from "expo-notifications";
 import { Alarm as AlarmDto } from "../dtos/Alarm";
 import { Days as DaysDto } from "../dtos/Days";
 import { saveAlarm } from "../api/Alarms";
-import { formatTime } from "../utils/time";
+import { formatTime, getWeekDayNumber } from "../utils/time";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function NewAlarm(props: any) {
   const { navigation } = props;
@@ -73,6 +82,23 @@ export default function NewAlarm(props: any) {
     };
 
     await saveAlarm(alarm);
+
+    Object.keys(alarm.days).forEach(async (dayName) => {
+      if (alarm.days[dayName]) {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: alarm.name,
+            body: "Esta es una prueba!",
+          },
+          trigger: {
+            weekday: getWeekDayNumber(dayName),
+            hour: alarm.time.getHours(),
+            minute: alarm.time.getMinutes(),
+            repeats: true,
+          },
+        });
+      }
+    });
 
     navigation.goBack();
   };

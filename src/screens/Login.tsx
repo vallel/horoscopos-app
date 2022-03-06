@@ -19,6 +19,5 @@ export default function Login(props: any) {
 const styles = StyleSheet.create({
   login: {
     flexDirection: "column",
-    justifyContent: "space-between",
   },
 });

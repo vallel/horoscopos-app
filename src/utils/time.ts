@@ -9,3 +9,11 @@ export function formatTime(date: Date) {
     (date.getHours() < 12 ? "AM" : "PM")
   );
 }
+
+export function getWeekDayNumber(weekday: string) {
+  const weekdays = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+  weekday = weekday.toLowerCase();
+  const weekdayNumber = weekdays.indexOf(weekday) +1;
+
+  return weekdayNumber;
+}
