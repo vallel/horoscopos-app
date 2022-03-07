@@ -1,9 +1,13 @@
 import { Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function CheckField(props: any) {
-  const { name, onSelection } = props;
-  const [isSelected, setIsSelected] = useState(false);
+  const { name, onSelection, selected } = props;
+  const [isSelected, setIsSelected] = useState(selected);
+
+  useEffect(() => {
+    setIsSelected(selected);
+  }, [selected]);
 
   const onFieldSelected = () => {
     let selected = !isSelected;

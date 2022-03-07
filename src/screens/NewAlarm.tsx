@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   StyleSheet,
@@ -13,19 +13,22 @@ import Checkbox from "expo-checkbox";
 import * as Notifications from "expo-notifications";
 import { Alarm as AlarmDto } from "../dtos/Alarm";
 import { Days as DaysDto } from "../dtos/Days";
-import { saveAlarm } from "../api/Alarms";
+import { saveAlarm, getAlarmById } from "../api/Alarms";
 import { formatTime, getWeekDayNumber } from "../utils/time";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
 
 export default function NewAlarm(props: any) {
-  const { navigation } = props;
+  const {
+    navigation,
+    route: { params },
+  } = props;
 
   const [name, setName] = useState("");
   const [time, setTime] = useState(new Date());
@@ -42,6 +45,21 @@ export default function NewAlarm(props: any) {
     sabado: false,
     domingo: false,
   });
+
+  useEffect(() => {
+    if (params && params.id) {
+      (async () => {
+        const alarm = await getAlarmById(params.id);
+
+        setName(alarm.name);
+        setTime(new Date(alarm.time));
+        setHoroscope(alarm.isHoroscope);
+        setVibration(alarm.isVibration);
+        setMusic(alarm.isMusic);
+        setDays(alarm.days);
+      })();
+    }
+  }, [params]);
 
   const onTimePickerFocus = () => {
     setShowPicker(true);
@@ -130,13 +148,41 @@ export default function NewAlarm(props: any) {
       )}
 
       <View style={styles.daysContainer}>
-        <CheckField name="lunes" onSelection={onDaySelected} />
-        <CheckField name="martes" onSelection={onDaySelected} />
-        <CheckField name="miercoles" onSelection={onDaySelected} />
-        <CheckField name="jueves" onSelection={onDaySelected} />
-        <CheckField name="viernes" onSelection={onDaySelected} />
-        <CheckField name="sabado" onSelection={onDaySelected} />
-        <CheckField name="domingo" onSelection={onDaySelected} />
+        <CheckField
+          name="lunes"
+          onSelection={onDaySelected}
+          selected={days.lunes}
+        />
+        <CheckField
+          name="martes"
+          onSelection={onDaySelected}
+          selected={days.martes}
+        />
+        <CheckField
+          name="miercoles"
+          onSelection={onDaySelected}
+          selected={days.miercoles}
+        />
+        <CheckField
+          name="jueves"
+          onSelection={onDaySelected}
+          selected={days.jueves}
+        />
+        <CheckField
+          name="viernes"
+          onSelection={onDaySelected}
+          selected={days.viernes}
+        />
+        <CheckField
+          name="sabado"
+          onSelection={onDaySelected}
+          selected={days.sabado}
+        />
+        <CheckField
+          name="domingo"
+          onSelection={onDaySelected}
+          selected={days.domingo}
+        />
       </View>
 
       <View style={styles.checks}>
