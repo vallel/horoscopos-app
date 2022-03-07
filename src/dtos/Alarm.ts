@@ -8,4 +8,5 @@ export interface Alarm {
   isHoroscope: Boolean;
   isVibration: Boolean;
   isMusic: Boolean;
+  notifications: Array<string>;
 }

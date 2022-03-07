@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Button, View, Text, StyleSheet, FlatList } from "react-native";
-import { getAlarms, deleteAlarm } from "../api/Alarms";
+import { Button, View, Text, StyleSheet } from "react-native";
+import { getAlarms } from "../api/Alarms";
 import { formatTime } from "../utils/time";
 import { getRandomQuote } from "../api/Quotes";
 import { Alarm } from "../dtos/Alarm";
@@ -15,7 +15,7 @@ export default function AlarmsNavigation(props: any) {
   const isScreenFocused = useIsFocused();
 
   const onAddAlarm = () => {
-    navigation.navigate("NewAlarm");
+    navigation.navigate("Alarm");
   };
 
   useEffect(() => {
@@ -32,11 +32,7 @@ export default function AlarmsNavigation(props: any) {
   }, [isScreenFocused]);
 
   const onAlarmSelection = (id: number) => {
-    navigation.navigate("NewAlarm", { id: id });
-  };
-
-  const onAlarmDelete = (id: number) => {
-    deleteAlarm(id);
+    navigation.navigate("Alarm", { id: id });
   };
 
   return (

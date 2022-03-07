@@ -10,25 +10,23 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import CheckField from "../components/CheckField";
 import Checkbox from "expo-checkbox";
-import * as Notifications from "expo-notifications";
 import { Alarm as AlarmDto } from "../dtos/Alarm";
 import { Days as DaysDto } from "../dtos/Days";
-import { saveAlarm, getAlarmById } from "../api/Alarms";
-import { formatTime, getWeekDayNumber } from "../utils/time";
+import {
+  saveAlarm,
+  getAlarmById,
+  updateAlarm,
+  deleteAlarm,
+} from "../api/Alarms";
+import { formatTime } from "../utils/time";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
-
-export default function NewAlarm(props: any) {
+export default function Alarm(props: any) {
   const {
     navigation,
     route: { params },
   } = props;
+
+  const isNewAlarm = !(params && params.id);
 
   const [name, setName] = useState("");
   const [time, setTime] = useState(new Date());
@@ -88,36 +86,31 @@ export default function NewAlarm(props: any) {
     setDays(dayValues);
   };
 
-  const onAddAlarm = async () => {
+  const onSaveAlarm = async () => {
+    const alarmId = isNewAlarm ? Date.now().toString() : params.id;
+
     const alarm: AlarmDto = {
-      id: Date.now().toString(),
+      id: alarmId,
       name: name,
       time: time,
       days: days,
       isHoroscope: horoscope,
       isVibration: vibration,
       isMusic: music,
+      notifications: [],
     };
 
-    await saveAlarm(alarm);
+    if (isNewAlarm) {
+      await saveAlarm(alarm);
+    } else {
+      await updateAlarm(alarm);
+    }
 
-    Object.keys(alarm.days).forEach(async (dayName) => {
-      if (alarm.days[dayName]) {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: alarm.name,
-            body: "Esta es una prueba!",
-          },
-          trigger: {
-            weekday: getWeekDayNumber(dayName),
-            hour: alarm.time.getHours(),
-            minute: alarm.time.getMinutes(),
-            repeats: true,
-          },
-        });
-      }
-    });
+    navigation.goBack();
+  };
 
+  const onDeleteAlarm = async (id: string) => {
+    await deleteAlarm(id);
     navigation.goBack();
   };
 
@@ -214,7 +207,18 @@ export default function NewAlarm(props: any) {
         </View>
       </View>
 
-      <Button title="Crear Alarma" onPress={onAddAlarm} />
+      <Button title="Guardar Alarma" onPress={onSaveAlarm} />
+      {!isNewAlarm && (
+        <View style={styles.deleteButtonContainer}>
+          <Button
+            title="Eliminar Alarma"
+            color={"red"}
+            onPress={() => {
+              onDeleteAlarm(params.id);
+            }}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -235,7 +239,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderColor: "#444",
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     marginTop: 5,
     marginBottom: 5,
   },
@@ -257,5 +261,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 50,
     marginVertical: 5,
+  },
+  deleteButtonContainer: {
+    marginTop: 10,
   },
 });
