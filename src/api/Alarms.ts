@@ -21,6 +21,7 @@ const addNotificationAlarm = (alarm: Alarm) => {
       let id = await Notifications.scheduleNotificationAsync({
         content: {
           title: alarm.name,
+          autoDismiss: true,
         },
         trigger: {
           weekday: getWeekDayNumber(dayName),

@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import AlarmsNavigation from "./AlarmsNavigation";
@@ -12,21 +13,30 @@ export default function Navigation() {
         name="Login"
         component={LoginScreen}
         options={{
-          title: "Iniciar sesión",
+          tabBarLabel: "Iniciar sesión",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="user" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen
         name="Register"
         component={RegisterScreen}
         options={{
-          title: "Registro",
+          tabBarLabel: "Registro",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="pen" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen
         name="Alarms"
         component={AlarmsNavigation}
         options={{
-          title: "Alarmas",
+          tabBarLabel: "Alarmas",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="clock" color={color} size={size} />
+          ),
         }}
       />
     </Tab.Navigator>

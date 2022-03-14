@@ -5,8 +5,8 @@ export interface Alarm {
   name: string;
   time: Date;
   days: DaysDto;
-  isHoroscope: Boolean;
-  isVibration: Boolean;
-  isMusic: Boolean;
+  isHoroscope: boolean;
+  isVibration: boolean;
+  isMusic: boolean;
   notifications: Array<string>;
 }
