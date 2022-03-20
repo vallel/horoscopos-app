@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { Alarm } from "../dtos/Alarm";
-import { getWeekDayNumber } from "../utils/time";
+import { getWeekDayNumber } from "../utils/DateTime";
 
 const ALARMS_STORAGE = "alarmslist";
 

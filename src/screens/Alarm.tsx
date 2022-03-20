@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  SafeAreaView,
-  View,
-} from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import CheckField from "../components/CheckField";
 import Checkbox from "expo-checkbox";
@@ -18,7 +11,7 @@ import {
   updateAlarm,
   deleteAlarm,
 } from "../api/Alarms";
-import { formatTime } from "../utils/time";
+import { formatTime } from "../utils/DateTime";
 
 export default function Alarm(props: any) {
   const {
@@ -115,9 +108,7 @@ export default function Alarm(props: any) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Crear alarma:</Text>
-
+    <View style={styles.container}>
       <TextInput
         style={styles.input}
         maxLength={50}
@@ -219,7 +210,7 @@ export default function Alarm(props: any) {
           />
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 

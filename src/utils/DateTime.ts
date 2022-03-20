@@ -10,6 +10,10 @@ export function formatTime(date: Date) {
   );
 }
 
+export function formatDate(date: Date) {
+  return date.toLocaleDateString();
+}
+
 export function getWeekDayNumber(weekday: string) {
   const weekdays = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
   weekday = weekday.toLowerCase();

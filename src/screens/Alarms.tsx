@@ -2,12 +2,15 @@ import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Button, View, Text, StyleSheet } from "react-native";
 import { getAlarms } from "../api/Alarms";
-import { formatTime } from "../utils/time";
+import { formatTime } from "../utils/DateTime";
 import { getRandomQuote } from "../api/Quotes";
 import { Alarm } from "../dtos/Alarm";
+import useAuth from "../hooks/useAuth";
 
-export default function AlarmsNavigation(props: any) {
+export default function Alarms(props: any) {
   const { navigation } = props;
+
+  const { auth, logIn } = useAuth();
 
   const [alarms, setAlarms] = useState([]);
   const [quote, setQuote] = useState("");
@@ -20,6 +23,11 @@ export default function AlarmsNavigation(props: any) {
 
   useEffect(() => {
     if (isScreenFocused) {
+      if (!auth) {
+        console.log("not logged in!");
+        navigation.navigate("Login");
+      }
+
       (async () => {
         const alarmsList = await getAlarms();
         setAlarms(alarmsList);
@@ -38,7 +46,7 @@ export default function AlarmsNavigation(props: any) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.welcome}>Bienvenida(o) %fulanit@%.</Text>
+        <Text style={styles.welcome}>Bienvenida(o) {auth.name}.</Text>
         <Text style={styles.message}>{quote}</Text>
       </View>
 
